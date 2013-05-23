@@ -9,24 +9,54 @@
  * @author     Tatsuya Ueda
  */
 
-class Email_Driver_AwsSes extends \Email_Driver {
+namespace Email;
+
+use Aws\Ses\SesClient;
+
+class Email_Driver_Awsses extends \Email_Driver {
 
 	static protected $ses = null;
-	static protected $defaults = null;
-	
-	static public function _init(){
-		
+	static protected  $defaults = null;
+
+	/**
+	 * Init Method
+	 */
+	static public function _init() {
+
 		\Config::load('awsses', true);
 		static::$defaults = \Config::get('awsses.defaults');
-		
-		if (static::$dynamodb === null) {
+
+		if (static::$ses === null) {
 			$awsconfig = array(
 				'key' => \Config::get('awsses.defaults.key'),
 				'secret' => \Config::get('awsses.defaults.secret'),
+				'region' => \Config::get('awsses.defaults.region'),
 			);
+
+			$ses = SesClient::factory($awsconfig);
 			
-			$aws = \Aws\Common\Aws::factory($awsconfig);
+			static::$ses = $ses;
 		}
+		
+	}
+
+	/**
+	 * Send Method
+	 * @return boolean
+	 */
+	protected function _send() {
+		
+		$message = $this->build_message();
+		
+		$data = array(
+			'RawMessage' => array(
+				'Data' => base64_encode($message['header'] . $message['body']),
+			),
+		);
+		
+		$result = static::$ses->sendRawEmail($data);
+
+		return true;
 		
 	}
 
