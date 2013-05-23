@@ -17,6 +17,7 @@ class Email_Driver_Awsses extends \Email_Driver {
 
 	static protected $ses = null;
 	static protected  $defaults = null;
+	protected $messageId = null;
 
 	/**
 	 * Init Method
@@ -56,7 +57,19 @@ class Email_Driver_Awsses extends \Email_Driver {
 		
 		$result = static::$ses->sendRawEmail($data);
 
+		$this->messageId = \Arr::get($result, 'MessageId');
+		
 		return true;
+		
+	}
+	
+	/**
+	 * Return MessageId
+	 * @return String
+	 */
+	public function getMessageId(){
+		
+		return $this->messageId;
 		
 	}
 
