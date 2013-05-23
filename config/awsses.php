@@ -7,6 +7,7 @@ return array(
 		'key' => 'PLEASE SET DEVELOPER KEY HERE',
 		// developer secret key
 		'secret' => 'PLEASE SET SECRET KEY HERE',
+		'region' => \Aws\Common\Enum\Region::US_EAST_1,
 	),
 
 	// Default setup group
