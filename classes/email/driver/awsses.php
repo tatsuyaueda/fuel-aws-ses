@@ -42,10 +42,9 @@ class Email_Driver_Awsses extends \Email_Driver {
 	}
 
 	/**
-	 * Send Method
-	 * @return boolean
+	 * Setting for NotificationTopic
 	 */
-	protected function _send() {
+	public function setNotificationTopic(){
 
 		// Setting for Bonces Notify
 		if(\Config::get('awsses.defaults.sns_notify.bounces')){
@@ -55,6 +54,7 @@ class Email_Driver_Awsses extends \Email_Driver {
 				'SnsTopic' => \Config::get('awsses.defaults.sns_notify.bounces')
 			));
 		}
+		
 		// Setting for Complaint Notify
 		if(\Config::get('awsses.defaults.sns_notify.complaints')){
 			static::$ses->setIdentityNotificationTopic(array(
@@ -63,7 +63,15 @@ class Email_Driver_Awsses extends \Email_Driver {
 				'SnsTopic' => \Config::get('awsses.defaults.sns_notify.complaints')
 			));
 		}
-		
+
+	}
+	
+	/**
+	 * Send Method
+	 * @return boolean
+	 */
+	protected function _send() {
+
 		$message = $this->build_message();
 		
 		$data = array(
