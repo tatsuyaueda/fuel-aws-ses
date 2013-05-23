@@ -8,6 +8,10 @@ return array(
 		// developer secret key
 		'secret' => 'PLEASE SET SECRET KEY HERE',
 		'region' => \Aws\Common\Enum\Region::US_EAST_1,
+		'sns_notify' => array(
+			'bounces' => false,
+			'complaints' => false,
+		),
 	),
 
 	// Default setup group

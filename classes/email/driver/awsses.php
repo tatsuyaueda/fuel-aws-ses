@@ -38,7 +38,7 @@ class Email_Driver_Awsses extends \Email_Driver {
 			
 			static::$ses = $ses;
 		}
-		
+
 	}
 
 	/**
@@ -46,6 +46,23 @@ class Email_Driver_Awsses extends \Email_Driver {
 	 * @return boolean
 	 */
 	protected function _send() {
+
+		// Setting for Bonces Notify
+		if(\Config::get('awsses.defaults.sns_notify.bounces')){
+			static::$ses->setIdentityNotificationTopic(array(
+				'Identity' => $this->config['from']['email'],
+				'NotificationType' => 'Bounce',
+				'SnsTopic' => \Config::get('awsses.defaults.sns_notify.bounces')
+			));
+		}
+		// Setting for Complaint Notify
+		if(\Config::get('awsses.defaults.sns_notify.complaints')){
+			static::$ses->setIdentityNotificationTopic(array(
+				'Identity' => $this->config['from']['email'],
+				'NotificationType' => 'Complaint',
+				'SnsTopic' => \Config::get('awsses.defaults.sns_notify.complaints')
+			));
+		}
 		
 		$message = $this->build_message();
 		
